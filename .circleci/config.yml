@@ -146,7 +146,7 @@ jobs:
         command: |
           rm -rf /home/circleci/workspace/caches/
           mkdir -p /home/circleci/workspace/caches/
-          mv ${CIRCLE_WORKING_DIRECTORY}/artifacts.txt /home/circleci/workspace/artifacts.txt
+          cp artifacts.txt /home/circleci/workspace/artifacts.txt
           docker save -o "/home/circleci/workspace/caches/${CIRCLE_PROJECT_REPONAME}-ci.tar" "${IMAGE_NAME}:ci"
     - persist_to_workspace:
         root: /home/circleci/workspace/
@@ -179,9 +179,10 @@ jobs:
           docker exec anchore-cli anchore-cli system wait --feedsready ""
           docker-compose logs engine-api
           docker exec anchore-cli anchore-cli system status
-          cd ${CIRCLE_WORKING_DIRECTORY}/scripts/tests/
+          pushd scripts/tests/
           python aetest.py docker.io/alpine:latest anchore-cli
           python aefailtest.py docker.io/alpine:latest anchore-cli
+          popd
 
   push_dockerhub:
     docker:
