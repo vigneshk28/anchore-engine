@@ -504,3 +504,26 @@ class PackageBlacklistGate(Gate):
         PkgFullMatchTrigger,
         NameMatchTrigger
     ]
+
+
+class SecretContentMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'contentmatch'
+    __description__ = 'Triggers if the content search analyzer has found any matches.  If the parameter is set, then will only trigger against found matches that are also in the SECRETCHECK_CONTENTREGEXP parameter list.  If the parameter is absent or blank, then the trigger will fire if the analyzer found any matches.'
+
+
+class SecretFilenameMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'filenamematch'
+    __description__ = 'Triggers if a file exists in the container that matches with any of the regular expressions given as SECRETCHECK_NAMEREGEXP parameters.'
+
+
+class SecretCheckGate(Gate):
+    __superceded_by__ = 'secret_scans'
+    __lifecycle_state__ = LifecycleStates.eol
+    __gate_name__ = 'secretcheck'
+    __description__ = 'Checks for Secrets Found in the Image'
+    __triggers__ = [
+        SecretContentMatchTrigger,
+        SecretFilenameMatchTrigger
+    ]
