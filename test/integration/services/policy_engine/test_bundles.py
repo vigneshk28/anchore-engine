@@ -1,14 +1,10 @@
 import pytest
 import json
-import os
 import copy
 from anchore_engine.services.policy_engine.engine.policy.gate import ExecutionContext
 from anchore_engine.services.policy_engine.engine.policy.bundles import build_bundle, GateAction
-from anchore_engine.db import get_thread_scoped_session, Image, end_session
-from anchore_engine.services.policy_engine.engine.tasks import ImageLoadTask
+from anchore_engine.db import get_thread_scoped_session, Image
 from anchore_engine.services.policy_engine.engine.policy.exceptions import InitializationError, UnsupportedVersionError, BundleTargetTagMismatchError
-from test.fixtures import anchore_db
-from test.integration.services.policy_engine.fixtures import test_data_env, test_data_env_with_images_loaded
 from anchore_engine.subsys import logger
 
 logger.enable_test_logging()
@@ -193,7 +189,6 @@ def test_duplicate_rule_evaluation(test_data_env_with_images_loaded):
     assert evaluation is not None, 'Got None eval'
     logger.info(json.dumps(evaluation.json(), indent=2))
     logger.info(json.dumps(evaluation.as_table_json(), indent=2))
-
 
 
 def test_image_whitelist(test_data_env_with_images_loaded):
