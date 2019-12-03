@@ -429,3 +429,55 @@ class LicenseBlacklistGate(Gate):
         FullMatchTrigger,
         SubstringMatchTrigger
     ]
+
+
+class NpmNotLatestTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmnotlatest'
+    __description__ = 'triggers if an installed NPM is not the latest version according to NPM data feed'
+
+
+class NpmNotOfficialTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmnotofficial'
+    __description__ = 'triggers if an installed NPM is not in the official NPM database, according to NPM data feed'
+
+
+class NpmBadVersionTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmbadversion'
+    __description__ = 'triggers if an installed NPM version is not listed in the official NPM feed as a valid version'
+
+
+class NpmPkgFullMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmpkgfullmatch'
+    __description__ = 'triggers if the evaluated image has an NPM package installed that matches one in the list given as a param (package_name|vers)'
+
+
+class NpmPkgNameMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmpkgnamematch'
+    __description__ = 'triggers if the evaluated image has an NPM package installed that matches one in the list given as a param (package_name)'
+
+
+class NpmNoFeedTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'npmnofeed'
+    __description__ = 'triggers if anchore does not have access to the NPM data feed'
+    __msg__ = "NPMNOFEED NPM packages are present but the anchore NPM feed is not available - will be unable to perform checks that require feed data"
+
+
+class NpmCheckGate(Gate):
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'npms'
+    __gate_name__ = 'npmcheck'
+    __description__ = 'NPM Checks'
+    __triggers__ = [
+        NpmNotLatestTrigger,
+        NpmNotOfficialTrigger,
+        NpmBadVersionTrigger,
+        NpmPkgFullMatchTrigger,
+        NpmPkgNameMatchTrigger,
+        NpmNoFeedTrigger
+    ]
