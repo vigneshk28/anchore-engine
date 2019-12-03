@@ -341,37 +341,37 @@ class FileparsePasswordGate(Gate):
         PEntryMatchTrigger,
     ]
 
-class NotLatestTrigger(BaseTrigger):
+class GemNotLatestTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ = 'gemnotlatest'
     __description__ = 'triggers if an installed GEM is not the latest version according to GEM data feed'
 
 
-class NotOfficialTrigger(BaseTrigger):
+class GemNotOfficialTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ = 'gemnotofficial'
     __description__ = 'triggers if an installed GEM is not in the official GEM database, according to GEM data feed'
 
 
-class BadVersionTrigger(BaseTrigger):
+class GemBadVersionTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ = 'gembadversion'
     __description__ = 'triggers if an installed GEM version is not listed in the official GEM feed as a valid version'
 
 
-class PkgFullMatchTrigger(BaseTrigger):
+class GemPkgFullMatchTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ = 'gempkgfullmatch'
     __description__ = 'triggers if the evaluated image has an GEM package installed that matches one in the list given as a param (package_name|vers)'
 
 
-class PkgNameMatchTrigger(BaseTrigger):
+class GemPkgNameMatchTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ = 'gempkgnamematch'
     __description__ = 'triggers if the evaluated image has an GEM package installed that matches one in the list given as a param (package_name)'
 
 
-class NoFeedTrigger(BaseTrigger):
+class GemNoFeedTrigger(BaseTrigger):
     __lifecycle_state__ = LifecycleStates.eol
     __trigger_name__ =  'gemnofeed'
     __description__ = 'triggers if anchore does not have access to the GEM data feed'
@@ -384,12 +384,12 @@ class GemCheckGate(Gate):
     __gate_name__ = "gemcheck"
     __description__ = 'Ruby Gem Checks'
     __triggers__ = [
-        NotLatestTrigger,
-        NotOfficialTrigger,
-        BadVersionTrigger,
-        PkgFullMatchTrigger,
-        PkgNameMatchTrigger,
-        NoFeedTrigger
+        GemNotLatestTrigger,
+        GemNotOfficialTrigger,
+        GemBadVersionTrigger,
+        GemPkgFullMatchTrigger,
+        GemPkgNameMatchTrigger,
+        GemNoFeedTrigger
     ]
 
 class ImageMetadataAttributeCheckTrigger(BaseTrigger):
@@ -480,4 +480,27 @@ class NpmCheckGate(Gate):
         NpmPkgFullMatchTrigger,
         NpmPkgNameMatchTrigger,
         NpmNoFeedTrigger
+    ]
+
+
+class PkgFullMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'pkgfullmatch'
+    __description__ = 'triggers if the evaluated image has a package installed that matches one in the list given as a param (package_name|vers)'
+
+
+class NameMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'pkgnamematch'
+    __description__ = 'triggers if the evaluated image has a package installed that matches one in the list given as a param (package_name)'
+
+
+class PackageBlacklistGate(Gate):
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'packages'
+    __gate_name__ = 'pkgblacklist'
+    __description__ = 'Distro Package Blacklists'
+    __triggers__ = [
+        PkgFullMatchTrigger,
+        NameMatchTrigger
     ]
