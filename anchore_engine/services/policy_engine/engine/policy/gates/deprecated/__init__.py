@@ -1,4 +1,3 @@
-from .file_content import FileCheckGate
 from .fileparse_passwd import FileparsePasswordGate
 from .package_blacklist import PackageBlacklistGate
 from .license_blacklist import LicenseBlacklistGate

@@ -257,3 +257,33 @@ class DockerfileGate(Gate):
         NoHealthCheck,
         NoDockerfile
     ]
+
+
+class ContentMatchTrigger(BaseTrigger):
+    __trigger_name__ = 'contentmatch'
+    __description__ = 'Triggers if the content search analyzer has found any matches.  If the parameter is set, then will only trigger against found matches that are also in the FILECHECK_CONTENTMATCH parameter list.  If the parameter is absent or blank, then the trigger will fire if the analyzer found any matches.'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class FilenameMatchTrigger(BaseTrigger):
+    __trigger_name__ = 'filenamematch'
+    __description__ = 'Triggers if a file exists in the container that matches with any of the regular expressions given as FILECHECK_NAMEREGEXP parameters.'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class SuidCheckTrigger(BaseTrigger):
+    __trigger_name__ = 'suidsgidcheck'
+    __description__ = 'Fires for each file found to have suid or sgid set'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class FileCheckGate(Gate):
+    __gate_name__ = 'filecheck'
+    __description__ = 'Image File Checks'
+    __superceded_by__ = 'files'
+    __lifecycle_state__ = LifecycleStates.eol
+    __triggers__ = [
+        ContentMatchTrigger,
+        FilenameMatchTrigger,
+        SuidCheckTrigger
+    ]
