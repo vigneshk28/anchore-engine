@@ -2,15 +2,7 @@
 By convention, we move eol'd gates into this module to keep them separated and avoid naming conflicts for classes.
 
 """
-import calendar
-import time
-
-from anchore_engine.db import DistroNamespace
-from anchore_engine.services.policy_engine.engine.feeds import DataFeeds
-
 from anchore_engine.services.policy_engine.engine.policy.gate import Gate, BaseTrigger, LifecycleStates
-from anchore_engine.services.policy_engine.engine.policy.params import BooleanStringParameter, IntegerStringParameter
-from anchore_engine.services.policy_engine.engine.vulnerabilities import have_vulnerabilities_for
 
 
 class SuidModeDiffTrigger(BaseTrigger):
@@ -149,7 +141,7 @@ class UnsupportedDistroTrigger(BaseTrigger):
 class AnchoreSecGate(Gate):
     __gate_name__ = 'anchoresec'
     __description__ = 'Vulnerability checks against distro packages'
-    __lifecycle_state__ = LifecycleStates.deprecated
+    __lifecycle_state__ = LifecycleStates.eol
     __superceded_by__ = 'vulnerabilities'
 
     __triggers__ = [
@@ -160,4 +152,27 @@ class AnchoreSecGate(Gate):
         UnknownSeverityTrigger,
         FeedOutOfDateTrigger,
         UnsupportedDistroTrigger
+    ]
+
+
+class VerifyTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'verify'
+    __description__ = 'Check package integrity against package db in in the image. Triggers for changes or removal or content in all or the selected DIRS param if provided, and can filter type of check with the CHECK_ONLY param'
+
+
+class PkgNotPresentTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'pkgnotpresent'
+    __description__ = 'triggers if the package(s) specified in the params are not installed in the container image. The parameters specify different types of matches.',
+
+
+class PackageCheckGate(Gate):
+    __gate_name__ = 'pkgcheck'
+    __description__ = 'Distro package checks'
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'packages'
+    __triggers__ = [
+        PkgNotPresentTrigger,
+        VerifyTrigger
     ]
