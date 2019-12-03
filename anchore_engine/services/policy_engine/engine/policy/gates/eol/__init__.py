@@ -391,3 +391,19 @@ class GemCheckGate(Gate):
         PkgNameMatchTrigger,
         NoFeedTrigger
     ]
+
+class ImageMetadataAttributeCheckTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'attributecheck'
+    __description__ = 'Evaluates a named image attribute against the given condition and fires if matched'
+
+
+class ImageMetadataGate(Gate):
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'metadata'
+    __gate_name__ = 'metadatacheck'
+    __description__ = 'Checks against image metadata gathered during analysis'
+
+    __triggers__ = [
+        ImageMetadataAttributeCheckTrigger,
+    ]
