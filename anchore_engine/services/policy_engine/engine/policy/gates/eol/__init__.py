@@ -407,3 +407,25 @@ class ImageMetadataGate(Gate):
     __triggers__ = [
         ImageMetadataAttributeCheckTrigger,
     ]
+
+class FullMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'licfullmatch'
+    __description__ = 'triggers if the evaluated image has a package installed with software distributed under the specified (exact match) license(s)'
+
+
+class SubstringMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'licsubmatch'
+    __description__ = 'triggers if the evaluated image has a package installed with software distributed under the specified (substring match) license(s)'
+
+
+class LicenseBlacklistGate(Gate):
+    __superceded_by__ = 'licenses'
+    __lifecycle_state__ = LifecycleStates.eol
+    __gate_name__ = 'licblacklist'
+    __description__ = 'Package License Blacklists'
+    __triggers__ = [
+        FullMatchTrigger,
+        SubstringMatchTrigger
+    ]
