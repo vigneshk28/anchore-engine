@@ -2,8 +2,15 @@
 By convention, we move eol'd gates into this module to keep them separated and avoid naming conflicts for classes.
 
 """
+import calendar
+import time
+
+from anchore_engine.db import DistroNamespace
+from anchore_engine.services.policy_engine.engine.feeds import DataFeeds
 
 from anchore_engine.services.policy_engine.engine.policy.gate import Gate, BaseTrigger, LifecycleStates
+from anchore_engine.services.policy_engine.engine.policy.params import BooleanStringParameter, IntegerStringParameter
+from anchore_engine.services.policy_engine.engine.vulnerabilities import have_vulnerabilities_for
 
 
 class SuidModeDiffTrigger(BaseTrigger):
@@ -89,4 +96,68 @@ class PkgDiffGate(Gate):
         PkgAddTrigger,
         PkgDelTrigger,
         PkgDiffTrigger
+    ]
+
+
+class LowSeverityTrigger(BaseTrigger):
+    __trigger_name__ = 'vulnlow'
+    __description__ = 'Checks for "low" severity vulnerabilities found in an image'
+    __vuln_levels__ = ['Low']
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class MediumSeverityTrigger(BaseTrigger):
+    __trigger_name__ = 'vulnmedium'
+    __description__ = 'Checks for "medium" severity vulnerabilities found in an image'
+    __vuln_levels__ = ['Medium']
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class HighSeverityTrigger(BaseTrigger):
+    __trigger_name__ = 'vulnhigh'
+    __description__ = 'Checks for "high" severity vulnerabilities found in an image'
+    __vuln_levels__ = ['High']
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class CriticalSeverityTrigger(BaseTrigger):
+    __trigger_name__ = 'vulncritical'
+    __description__ = 'Checks for "critical" severity vulnerabilities found in an image'
+    __vuln_levels__ = ['Critical']
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class UnknownSeverityTrigger(BaseTrigger):
+    __trigger_name__ = 'vulnunknown'
+    __description__ = 'Checks for "unkonwn" or "negligible" severity vulnerabilities found in an image'
+    __vuln_levels__ = ['Unknown', 'Negligible', None]
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class FeedOutOfDateTrigger(BaseTrigger):
+    __trigger_name__ = 'feedoutofdate'
+    __description__ = 'Fires if the CVE data is older than the window specified by the parameter MAXAGE (unit is number of days)'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class UnsupportedDistroTrigger(BaseTrigger):
+    __trigger_name__ = 'unsupporteddistro'
+    __description__ = 'Fires if a vulnerability scan cannot be run against the image due to lack of vulnerability feed data for the images distro'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class AnchoreSecGate(Gate):
+    __gate_name__ = 'anchoresec'
+    __description__ = 'Vulnerability checks against distro packages'
+    __lifecycle_state__ = LifecycleStates.deprecated
+    __superceded_by__ = 'vulnerabilities'
+
+    __triggers__ = [
+        LowSeverityTrigger,
+        MediumSeverityTrigger,
+        HighSeverityTrigger,
+        CriticalSeverityTrigger,
+        UnknownSeverityTrigger,
+        FeedOutOfDateTrigger,
+        UnsupportedDistroTrigger
     ]
