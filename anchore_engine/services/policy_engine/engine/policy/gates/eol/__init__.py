@@ -340,3 +340,54 @@ class FileparsePasswordGate(Gate):
         ShellMatchTrigger,
         PEntryMatchTrigger,
     ]
+
+class NotLatestTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'gemnotlatest'
+    __description__ = 'triggers if an installed GEM is not the latest version according to GEM data feed'
+
+
+class NotOfficialTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'gemnotofficial'
+    __description__ = 'triggers if an installed GEM is not in the official GEM database, according to GEM data feed'
+
+
+class BadVersionTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'gembadversion'
+    __description__ = 'triggers if an installed GEM version is not listed in the official GEM feed as a valid version'
+
+
+class PkgFullMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'gempkgfullmatch'
+    __description__ = 'triggers if the evaluated image has an GEM package installed that matches one in the list given as a param (package_name|vers)'
+
+
+class PkgNameMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'gempkgnamematch'
+    __description__ = 'triggers if the evaluated image has an GEM package installed that matches one in the list given as a param (package_name)'
+
+
+class NoFeedTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ =  'gemnofeed'
+    __description__ = 'triggers if anchore does not have access to the GEM data feed'
+    __msg__ = "GEMNOFEED GEM packages are present but the anchore GEM feed is not available - will be unable to perform checks that require feed data"
+
+
+class GemCheckGate(Gate):
+    __superceded_by__ = 'gems'
+    __lifecycle_state__ = LifecycleStates.eol
+    __gate_name__ = "gemcheck"
+    __description__ = 'Ruby Gem Checks'
+    __triggers__ = [
+        NotLatestTrigger,
+        NotOfficialTrigger,
+        BadVersionTrigger,
+        PkgFullMatchTrigger,
+        PkgNameMatchTrigger,
+        NoFeedTrigger
+    ]
