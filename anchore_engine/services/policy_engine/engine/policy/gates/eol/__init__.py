@@ -287,3 +287,56 @@ class FileCheckGate(Gate):
         FilenameMatchTrigger,
         SuidCheckTrigger
     ]
+
+
+class FileNotStoredTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'filenotstored'
+    __description__ = 'triggers if the /etc/passwd file is not present/stored in the evaluated image'
+    __params__ = None
+    __msg__ = 'FILENOTSTORED Cannot locate /etc/passwd in image stored files archive: check analyzer settings'
+
+
+class UsernameMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'usernamematch'
+    __description__ = 'triggers if specified username is found in the /etc/passwd file'
+
+
+class UserIdMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'useridmatch'
+    __description__ = 'triggers if specified user id is found in the /etc/passwd file'
+
+
+class GroupIdMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'groupidmatch'
+    __description__ = 'triggers if specified group id is found in the /etc/passwd file'
+
+
+class ShellMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'shellmatch'
+    __description__ = 'triggers if specified login shell for any user is found in the /etc/passwd file'
+
+
+class PEntryMatchTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'pentrymatch'
+    __description__ = 'triggers if specified entire passwd entry is found in the /etc/passwd file'
+
+
+class FileparsePasswordGate(Gate):
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'passwd_file'
+    __gate_name__ = 'fileparse_passwd'
+    __description__ = 'Checks against the content of /etc/passwd in the image'
+    __triggers__ = [
+        FileNotStoredTrigger,
+        UsernameMatchTrigger,
+        UserIdMatchTrigger,
+        GroupIdMatchTrigger,
+        ShellMatchTrigger,
+        PEntryMatchTrigger,
+    ]

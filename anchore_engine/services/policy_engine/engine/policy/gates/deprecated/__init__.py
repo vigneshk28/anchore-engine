@@ -1,4 +1,3 @@
-from .fileparse_passwd import FileparsePasswordGate
 from .package_blacklist import PackageBlacklistGate
 from .license_blacklist import LicenseBlacklistGate
 from .gem_check import GemCheckGate
