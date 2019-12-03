@@ -1,7 +1,5 @@
-from .dockerfile import DockerfileGate
 from .file_content import FileCheckGate
 from .fileparse_passwd import FileparsePasswordGate
-from .check_package_info import PackageCheckGate
 from .package_blacklist import PackageBlacklistGate
 from .license_blacklist import LicenseBlacklistGate
 from .gem_check import GemCheckGate

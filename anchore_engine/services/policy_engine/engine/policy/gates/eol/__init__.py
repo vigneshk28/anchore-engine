@@ -176,3 +176,84 @@ class PackageCheckGate(Gate):
         PkgNotPresentTrigger,
         VerifyTrigger
     ]
+
+class EffectiveUserTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'effectiveuser'
+    __description__ = 'Triggers if the effective user for the container is either root when not allowed or is not in a whitelist'
+
+
+class DirectiveCheckTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'directivecheck'
+    __description__ = 'Triggers if any directives in the list are found to match the described condition in the dockerfile'
+
+
+class ExposeTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'expose'
+    __description__ = 'triggers if Dockerfile is EXPOSEing ports that are not in ALLOWEDPORTS, or are in DENIEDPORTS'
+
+
+class NoFromTrigger(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'nofrom'
+    __params__ = None
+    __description__ = 'triggers if there is no FROM line specified in the Dockerfile'
+
+
+class FromScratch(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'fromscratch'
+    __description__ = 'triggers the FROM line specified "scratch" as the parent'
+
+
+class NoTag(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'notag'
+    __description__ = 'triggers if the FROM container specifies a repo but no explicit, non-latest tag'
+
+
+class Sudo(BaseTrigger):
+    __lifecycle_state__ = LifecycleStates.eol
+    __trigger_name__ = 'sudo'
+    __description__ = 'triggers if the Dockerfile contains operations running with sudo'
+
+
+class VolumePresent(BaseTrigger):
+    __trigger_name__ = 'volumepresent'
+    __description__ = 'triggers if the Dockerfile contains a VOLUME line'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class NoHealthCheck(BaseTrigger):
+    __trigger_name__ = 'nohealthcheck'
+    __description__ = 'triggers if the Dockerfile does not contain any HEALTHCHECK instructions'
+    __msg__ = 'Dockerfile does not contain any HEALTHCHECK instructions'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class NoDockerfile(BaseTrigger):
+    __trigger_name__ = 'nodockerfile'
+    __description__ = 'triggers if anchore analysis was performed without supplying a real Dockerfile'
+    __msg__ = 'Image was not analyzed with an actual Dockerfile'
+    __lifecycle_state__ = LifecycleStates.eol
+
+
+class DockerfileGate(Gate):
+    __gate_name__ = 'dockerfilecheck'
+    __description__ = 'Check Dockerfile Instructions'
+    __lifecycle_state__ = LifecycleStates.eol
+    __superceded_by__ = 'dockerfile'
+    __triggers__ = [
+        DirectiveCheckTrigger,
+        EffectiveUserTrigger,
+        ExposeTrigger,
+        NoFromTrigger,
+        FromScratch,
+        NoTag,
+        Sudo,
+        VolumePresent,
+        NoHealthCheck,
+        NoDockerfile
+    ]
