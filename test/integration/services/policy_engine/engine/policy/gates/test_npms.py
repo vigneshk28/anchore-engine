@@ -36,7 +36,7 @@ class NpmCheckGateTest(GateUnitTest):
         test_context = gate.prepare_context(self.test_image, test_context)
         t.evaluate(self.test_image, test_context)
         logger.info(('Fired: {}'.format(t.fired)))
-        self.assertEqual(len(t.fired), 0)
+        self.assertEqual(len(t.fired), 1) # Expect it to have fired since db is empty
 
 
     def test_badversion(self):
