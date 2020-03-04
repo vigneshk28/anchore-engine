@@ -236,6 +236,14 @@ workflows:
           filters: *filter_rc_tags
           requires:
             - rc_e2e_tests
+      - anchore/image_scan:
+          context: dockerhub
+          filters: *filter_rc_tags
+          requires:
+            - push_rc_image
+          image_name: ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}-dev:${CIRCLE_TAG}
+          private_registry: true
+          timeout: '2000'
 
   prod_image_workflow:
     jobs:
